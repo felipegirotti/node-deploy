@@ -33,7 +33,7 @@
     echo "$DEPLOY_USER ALL=(root) NOPASSWD: /usr/local/bin/start-apps" >> /etc/sudoers.d/linx-website
     echo "$DEPLOY_USER ALL=(root) NOPASSWD: /usr/local/bin/stop-apps" >> /etc/sudoers.d/linx-website
   args:
-    executable: /bin/bash
+    executable: /bin/bash  
   tags:
     - start-apps
 
@@ -43,5 +43,6 @@
     sudo start-apps
   args:
     executable: /bin/bash
+  when: start_default_apps is defined
   tags:
     - start-apps

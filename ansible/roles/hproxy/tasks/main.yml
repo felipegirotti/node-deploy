@@ -12,23 +12,26 @@
     src: haproxy.cfg.j2 
     dest: /etc/haproxy/haproxy.cfg
 
-- name: create servers in config haproxy
-  shell: |
-    SERVERS=''
-    HOSTS={{ groups.apps }}
-    VARS={{hostvars}}
-    echo $VARS
-    for host in $HOSTS; do
-        $host=`sed /u\'/''`
-        IP={{ hostvars[$host]['ansible_host'] }}
-        SERVERS="$SERVERS \n server $host  $IP:5001"
-    done
-    echo $SERVERS
-    sed -i "s/%servers%/$SERVERS" /etc/haproxy/haproxy.cfg        
+- name: gather facts from db servers
+  setup:
+  delegate_to: "{{item}}"
+  delegate_facts: True
+  loop: "{{groups['apps']}}"
+  tags:
+    - dumps
+  
+- name: set var servers_lb
+  shell: |    
+    {% for host in groups.apps %}
+      CPUS="{{ hostvars[host]['ansible_processor_vcpus'] }}"
+      for((i = 1; i <= CPUS; i++)); do         
+        echo "   server {{host}} {{ hostvars[host]['ansible_host'] }}:500${i}" >> /etc/haproxy/haproxy.cfg       
+      done      
+    {% endfor %}         
   args:
-    executable: /bin/bash
-  notify: 
-    - restart haproxy  
+    executable: /bin/bash  
+  tags:
+    - dumps
 
 - name: creater rsyslog haproxy
   template:

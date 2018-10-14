@@ -21,3 +21,10 @@
     - role: hproxy    
   tags:
     - lb  
+
+- hosts: monitoring
+  become: yes
+  roles:
+    - role: nagios
+  tags:
+    - monitoring

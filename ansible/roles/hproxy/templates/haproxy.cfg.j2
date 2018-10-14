@@ -40,11 +40,4 @@ backend app
     option forwardfor
     option httpchk HEAD / HTTP/1.1\r\nHost:localhost
     balance     {{ balance }}
-    #
-    {% for host in groups.apps %}
-        
-            server {{ host }} {{ hostvars[host]['ansible_host'] }}:5001
-        
-    {% endfor %}
-
-
+     
