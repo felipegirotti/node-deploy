@@ -1,0 +1,41 @@
+---
+# This role installs HAProxy and configures it.
+
+- name: update apt cache
+  apt: update_cache=yes cache_valid_time=3600
+
+- name: install haproxy
+  apt: name=haproxy state=present
+
+- name: Configure the haproxy cnf file with hosts
+  template: 
+    src: haproxy.cfg.j2 
+    dest: /etc/haproxy/haproxy.cfg
+
+- name: create servers in config haproxy
+  shell: |
+    SERVERS=''
+    HOSTS={{ groups.apps }}
+    VARS={{hostvars}}
+    echo $VARS
+    for host in $HOSTS; do
+        $host=`sed /u\'/''`
+        IP={{ hostvars[$host]['ansible_host'] }}
+        SERVERS="$SERVERS \n server $host  $IP:5001"
+    done
+    echo $SERVERS
+    sed -i "s/%servers%/$SERVERS" /etc/haproxy/haproxy.cfg        
+  args:
+    executable: /bin/bash
+  notify: 
+    - restart haproxy  
+
+- name: creater rsyslog haproxy
+  template:
+    src: rsyslog-haproxy.j2
+    dest: /etc/rsyslog.d/haproxy.conf
+  notify:
+    - restart rsyslog 
+
+- name: Start the haproxy service
+  service: name=haproxy state=started enabled=yes

@@ -1,0 +1,10 @@
+---
+- import_tasks: nodejs.yml
+  tags:
+    - nodejs
+
+- import_tasks: services.yml
+  tags:
+    - app
+
+- import_tasks: initial_services_per_cpu.yml

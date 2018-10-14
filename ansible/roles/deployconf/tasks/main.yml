@@ -1,0 +1,12 @@
+---
+- import_tasks: deploy-user.yml
+  remote_user: "{{ admin_user }}"
+  become: yes
+  tags:
+    - add-remove-keys
+
+- import_tasks: set-authorized-keys-user.yml
+  remote_user: "{{ admin_user }}"
+  become: yes
+  tags:
+    - add-remove-keys

@@ -1,0 +1,14 @@
+---
+# =======================================================
+# Authorized SSH keys
+# =======================================================
+admin_user_authorized_keys:
+  - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDZgmz/zxlm/FeUic1/FjwNC3EXPKkdHRHdc9bKenGoduDtiumPwWpmXeRRtT2P4EYo80iU39yEygF70XM+yMk+ADa0Rc2OrlLGowDC6G+RnoUB0m6VIOvKxAgnHo6En8Lt264TWBbBDv6MeaOnwyh121yChTvSfMsH5u6W2m5UG/6CRTeoWPmiBmgEZK2KS6DAKy/tKnXWPwnM3z+7eWd3rLdK3NLN8kc0R7pA2Xf7SGODoAZu89AFmWNo11CnqvZFPtse8T3Cdljc3hhTgETRGuOu9VTfiuukqX3yXqLuEI4RohISX3YGRSqJ+HlT4jJQXWZWXBDdoEtnQRwincw9 felipe.girotti@gmail.com"
+
+# User
+deploy_user_keys:
+  - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDZgmz/zxlm/FeUic1/FjwNC3EXPKkdHRHdc9bKenGoduDtiumPwWpmXeRRtT2P4EYo80iU39yEygF70XM+yMk+ADa0Rc2OrlLGowDC6G+RnoUB0m6VIOvKxAgnHo6En8Lt264TWBbBDv6MeaOnwyh121yChTvSfMsH5u6W2m5UG/6CRTeoWPmiBmgEZK2KS6DAKy/tKnXWPwnM3z+7eWd3rLdK3NLN8kc0R7pA2Xf7SGODoAZu89AFmWNo11CnqvZFPtse8T3Cdljc3hhTgETRGuOu9VTfiuukqX3yXqLuEI4RohISX3YGRSqJ+HlT4jJQXWZWXBDdoEtnQRwincw9 felipe.girotti@gmail.com"
+deploy_machines_keys:
+  - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDZgmz/zxlm/FeUic1/FjwNC3EXPKkdHRHdc9bKenGoduDtiumPwWpmXeRRtT2P4EYo80iU39yEygF70XM+yMk+ADa0Rc2OrlLGowDC6G+RnoUB0m6VIOvKxAgnHo6En8Lt264TWBbBDv6MeaOnwyh121yChTvSfMsH5u6W2m5UG/6CRTeoWPmiBmgEZK2KS6DAKy/tKnXWPwnM3z+7eWd3rLdK3NLN8kc0R7pA2Xf7SGODoAZu89AFmWNo11CnqvZFPtse8T3Cdljc3hhTgETRGuOu9VTfiuukqX3yXqLuEI4RohISX3YGRSqJ+HlT4jJQXWZWXBDdoEtnQRwincw9 felipe.girotti@gmail.com"
+deploy_user_authorized_keys:
+  "{{ admin_user_authorized_keys + deploy_user_keys + deploy_machines_keys }}"

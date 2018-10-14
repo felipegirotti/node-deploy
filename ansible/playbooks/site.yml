@@ -1,0 +1,23 @@
+---
+- import_playbook: prebootstrap.yml
+
+- hosts: all
+  become: yes
+  roles:    
+    - role: common
+
+- hosts: apps
+  become: yes
+  roles:
+    - role: deployconf
+    - role: app
+  tags:
+    - apps
+
+- hosts: lb
+  become: yes
+  become_user: root
+  roles: 
+    - role: hproxy    
+  tags:
+    - lb  

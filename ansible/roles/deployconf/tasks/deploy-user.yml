@@ -1,0 +1,43 @@
+---
+- name: Create deploy user group
+  group:
+    name: "{{ deploy_user_group }}"
+    state: present
+
+- name: Create deploy user
+  user:
+    name: "{{ deploy_user }}"
+    comment: "Unprivileged {{ deploy_user }} user"
+    group: "{{ deploy_user_group }}"
+    shell: /bin/bash
+
+- name: Create application deploy directory
+  file:
+    path: "{{ project_path }}"
+    state: directory
+    owner: "{{ deploy_user }}"
+    group: "{{ deploy_user_group }}"
+    mode: 0775
+  tags:
+    - create-app-directory
+
+- import_tasks: set-authorized-keys-user.yml
+
+- name: Add deploy user’s SSH private key
+  copy:
+    dest:  "{{ deploy_user_dir }}/.ssh/id_rsa"
+    content: "{{ deploy_user_private_key }}"
+    owner: "{{ deploy_user }}"
+    group: "{{ deploy_user_group }}"
+    mode: 0600
+
+- name: Add the upstream repository to the SSH know_hosts file
+  lineinfile:
+    dest:   "/home/{{ deploy_user }}/.ssh/known_hosts"
+    create: yes
+    state:  present
+    line:   "{{ item.line }}"
+    regexp: "{{ item.regexp }}"
+    group:  "{{ deploy_user_group }}"
+    owner:  "{{ deploy_user }}"
+  with_items: "{{ known_hosts }}"

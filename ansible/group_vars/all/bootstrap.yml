@@ -1,0 +1,16 @@
+---
+
+admin_user: ubuntu
+deploy_user: deploy
+deploy_user_group: "{{ deploy_user }}"
+deploy_user_dir: "/home/{{ deploy_user}}"
+
+known_hosts:
+  - line:  "{{ lookup('pipe', 'ssh-keyscan -t rsa github.com') }}"
+    regexp: "^github\\.com"
+
+extra_packages:
+  - python-pip
+  - curl
+  - git
+  - vim

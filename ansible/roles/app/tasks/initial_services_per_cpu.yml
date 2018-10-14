@@ -1,0 +1,47 @@
+---
+- name: Create a file start apps
+  template:
+    src: "{{ item }}.j2"
+    dest: "/usr/local/bin/{{ item }}"    
+  with_items:
+    - ["start-apps", "stop-apps"]    
+  tags:
+    - start-apps
+- name: Make executeable
+  file: 
+    path: "/usr/local/bin/{{ item }}"
+    mode: a+x    
+    owner: "{{ deploy_user }}"
+    group: "{{ deploy_user_group }}"
+  with_items:
+    - ["start-apps", "stop-apps"]
+  tags:
+    - start-apps
+
+- name: Register service
+  shell: |
+    CPUS=`cat /proc/cpuinfo | grep processor | wc -l`
+    DEPLOY_USER="{{ deploy_user }}"
+    rm -f /etc/sudoers.d/linx-website
+    for ((i = 1; i <= $CPUS; i++)); do
+        systemctl enable linx-website@"500${i}"
+        echo "$DEPLOY_USER ALL=(root) NOPASSWD: /bin/systemctl start linx-website@500${i}" >> /etc/sudoers.d/linx-website
+        echo "$DEPLOY_USER ALL=(root) NOPASSWD: /bin/systemctl stop linx-website@500${i}" >> /etc/sudoers.d/linx-website
+        echo "$DEPLOY_USER ALL=(root) NOPASSWD: /bin/systemctl status linx-website@500${i}" >> /etc/sudoers.d/linx-website
+        echo "$DEPLOY_USER ALL=(root) NOPASSWD: /bin/systemctl restart linx-website@500${i}" >> /etc/sudoers.d/linx-website
+    done
+    echo "$DEPLOY_USER ALL=(root) NOPASSWD: /usr/local/bin/start-apps" >> /etc/sudoers.d/linx-website
+    echo "$DEPLOY_USER ALL=(root) NOPASSWD: /usr/local/bin/stop-apps" >> /etc/sudoers.d/linx-website
+  args:
+    executable: /bin/bash
+  tags:
+    - start-apps
+
+- name: Start Services Per Cpu
+  shell: |
+    echo "Number of processors - {{ ansible_processor_vcpus }}"
+    sudo start-apps
+  args:
+    executable: /bin/bash
+  tags:
+    - start-apps

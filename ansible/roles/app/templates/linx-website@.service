@@ -1,0 +1,15 @@
+[Unit]
+Description=linx-website-node application
+After=network.target
+
+[Service]
+User={{ deploy_user }}
+Group={{ deploy_user_group }}
+Restart=on-failure
+RestartSec=2
+Environment=NODE_PORT=%i
+WorkingDirectory={{ app_path }}/current
+ExecStart=/usr/bin/node app.js
+
+[Install]
+WantedBy=multi-user.target

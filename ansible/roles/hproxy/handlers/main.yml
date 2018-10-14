@@ -1,0 +1,13 @@
+---
+# Handlers for HAproxy
+
+- name: restart haproxy
+  service: name=haproxy state=restarted
+
+- name: reload haproxy
+  service: name=haproxy state=reloaded
+
+# handlers file for syslog
+- name: restart rsyslog
+  service: name=rsyslogd state=restarted
+

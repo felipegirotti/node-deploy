@@ -1,0 +1,20 @@
+#!/bin/bash
+
+CPUS=`cat /proc/cpuinfo | grep processor | wc -l`
+for ((i = 1; i <= $CPUS; i++)); do
+      systemctl stop linx-website@"500${i}"
+      systemctl start linx-website@"500${i}"
+      IS_OK='500'
+      for ((k = 0; k < 3; k++)); do
+        IS_OK=`curl -s -o /dev/null -w "%{http_code}" 127.0.0.1:"500${i}"`
+        if [ $IS_OK = "200" ]; then
+            printf "\u2714 APP running in port 500$i\n"
+            break
+        fi
+        sleep 1
+      done
+      if [ $IS_OK != "200" ]; then
+         printf "\u274c App in port 500$i not running\n" >&2  # write error message to stderr
+         exit 1
+      fi
+done

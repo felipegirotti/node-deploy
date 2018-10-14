@@ -1,0 +1,34 @@
+---
+- name: Copy systemd services for linx-site
+  template:
+    src: "{{ item }}.service"
+    dest: "/etc/systemd/system/{{ item }}.service"
+  with_items: "{{ services }}"
+  tags:
+    - update-service
+
+- name: Allow deploy user to manage services
+  lineinfile:
+    create: yes
+    dest: /etc/sudoers.d/linx-services
+    regexp: "^{{ deploy_user }}.*systemctl {{ item[1] }} {{ item[0] }}"
+    state: present
+    line: "{{ deploy_user }} ALL=(root) NOPASSWD: /bin/systemctl {{ item[1] }} {{ item[0] }}"
+    validate: 'visudo -cf %s'
+  with_nested:
+    - ["{{ services }}", 'rsyslog.service']
+    - ["start", "stop", "restart", "status"]
+  tags:
+    - update-service
+
+- name: Allow deploy user to read journalctl for the application
+  lineinfile:
+    create: yes
+    dest: /etc/sudoers.d/linx-journalctl
+    state: present
+    regexp: "^{{ deploy_user }}.*journalctl -u {{ item }}"
+    line: "{{ deploy_user }} ALL=(root) NOPASSWD: /bin/journalctl -u {{ item }}"
+    validate: 'visudo -cf %s'
+  with_items: "{{ services }}"
+  tags:
+    - update-service

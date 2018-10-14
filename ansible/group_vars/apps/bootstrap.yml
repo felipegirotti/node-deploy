@@ -1,0 +1,7 @@
+---
+# Node.js
+node_js_release: 8.x
+
+app_name: linx
+project_path: /var/projects
+app_path: "{{ project_path }}/{{ app_name }}"
