@@ -1,6 +1,0 @@
-CPUS=`cat /proc/cpuinfo | grep processor | wc -l`
-DEPLOY_USER="{{ deploy_user }}"
-for ((i = 1; i <= $CPUS; i++)); do
-    systemctl enable linx-website@"500${i}"
-    echo "$DEPLOU_USER ALL=(root) NOPASSWD: /bin/systemctl linx-website@500${i}" >> /etc/sudoers.d/linx-services
-done

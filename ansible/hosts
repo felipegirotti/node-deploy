@@ -1,8 +1,6 @@
 [apps]
-linx01 ansible_host=192.168.33.27 ansible_port=22 ansible_user=vagrant
+linx01 ansible_host=192.168.33.27 ansible_port=22 ansible_user=vagrant ansible_ssh_extra_args='-o StrictHostKeyChecking=no'
 
 [lb]
 linxlb ansible_host=192.168.33.29 ansible_port=22 ansible_user=vagrant ansible_ssh_extra_args='-o StrictHostKeyChecking=no'
 
-[monitoring]
-linxlb ansible_host=192.168.33.28 ansible_port=22 ansible_user=vagrant ansible_ssh_extra_args='-o StrictHostKeyChecking=no'

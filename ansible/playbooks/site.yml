@@ -18,13 +18,11 @@
   become: yes
   become_user: root
   roles: 
-    - role: hproxy    
+    - role: hproxy     
+    - role: sendmail
+    - role: performance
+      tags:
+        - performance
   tags:
     - lb  
 
-- hosts: monitoring
-  become: yes
-  roles:
-    - role: nagios
-  tags:
-    - monitoring
