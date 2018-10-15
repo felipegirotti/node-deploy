@@ -1,7 +1,7 @@
 # Provision and deployment Node apps
 
 O projeto consiste em provisionamento de máquinas automatizado e deploy blue/green para aplicações nodes 
-Servidores para a aplicação e servidor de load balancer com (haproxy)[http://www.haproxy.org/].
+Servidores para a aplicação e servidor de load balancer com [haproxy](http://www.haproxy.org/).
 
 E alguns scripts para teste de carga e parseamento de logs.
 
@@ -9,10 +9,10 @@ E alguns scripts para teste de carga e parseamento de logs.
 Este é apenas um exemplo simples, poderia ter usado o sistema de cluster provido pelo node, mas como é exemplo utilizamos para cada CPU disponível na máquina um novo processo da aplicação em uma porta diferente.
 
 ## Requirements 
-- (Ansible)[https://www.ansible.com/]
-- (Capistrano)[https://capistranorb.com/] `gem install capistrano`
+- [Ansible](https://www.ansible.com/)
+- [Capistrano](https://capistranorb.com/) `gem install capistrano`
     - Capistrano npm (`gem install capistrano-npm`)
-- (Vagrant)[https://www.vagrantup.com/] (Apenas para testes locais)
+- [Vagrant](https://www.vagrantup.com/) (Apenas para testes locais)
 
 
 ## Provision
@@ -45,6 +45,6 @@ Há um cron configurado para rodar o teste de carga usando Apache Benchmark todo
 ## Concluding Remarks
 Para o funcionamento de https é necessário um domínio válido para o certboot funcionar, e deve adicionar a variável `cerboot: true` dentro do  arquivo `ansible/group_vars/lb/bootstrap.yml`.   
 
-Com o avanço de tecnologias como (docker)[https://www.docker.com/] e (kubernetes)[https://kubernetes.io/] é muito mais viável utilizar destas.   
-Com containers é possível isolar toda a aplicação e deixar disponível o mesmo envirorment para todos, devs, qas, staging e production.  
-E com kubernetes todo o gerenciamento de carga, auto scaling e monitoramento é muito mais simples, além de contar com o (helm)[https://helm.sh/] para facilitar o processo de deployment.
+Com o avanço de tecnologias como [docker](https://www.docker.com/) e [kubernetes](https://kubernetes.io/) é muito mais viável utilizar destas.   
+Com containers é possível isolar toda a aplicação e deixar disponível o mesmo envirorment para todos, devs, qas, staging e production. Além de ser praticamente indispensável quando se trabalha com microservices. 
+E com kubernetes todo o gerenciamento de carga, auto scaling e monitoramento é muito mais simples, além de contar com o [helm](https://helm.sh/) para facilitar o processo de deployment.
