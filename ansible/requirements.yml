@@ -1,6 +1,6 @@
 ---
 
-- src: geerlingguy.certbot
+- src: geerlingguy.certbot  
   version: 3.0.0
 
 - src: hashbangcode.sendmail

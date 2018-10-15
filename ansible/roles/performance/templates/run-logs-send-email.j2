@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# ---- RUN LOAD TESTS ----
+load-performance
+
+FILE="/tmp/log-email.txt"
+echo "Subject: Logs of linx webserver"  >> $FILE
+echo "" >> $FILE
+echo "" >> $FILE
+read-logs >> $FILE
+
+echo "CONTENT OF EMAIL: " 
+cat $FILE
+
+echo $FILE | sendmail -v {{ email_logs }}
+
+rm $FILE

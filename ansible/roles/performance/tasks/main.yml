@@ -1,0 +1,37 @@
+---
+- name: update apt cache
+  apt: update_cache=yes cache_valid_time=3600
+
+- name: install apacheutils
+  apt: name=apache2-utils state=present
+
+- name: create scritp load
+  template:
+    src: load-performance.j2
+    dest: /usr/local/bin/load-performance
+
+- name: create script of cat logs
+  template:
+    src: read-logs.j2
+    dest: /usr/local/bin/read-logs
+
+- name: create script to read logs and send email
+  template:
+    src: run-logs-send-email.j2
+    dest: /usr/local/bin/run-logs-send-email
+
+- name: make executeable file
+  file: 
+    path: "/usr/local/bin/{{ item }}"
+    mode: a+x    
+    owner: "{{ admin_user }}"   
+  with_items:
+    - ["load-performance", "read-logs", "run-logs-send-email"] 
+
+- name: create a cron to send metrics
+  cron:                  
+      job: "/usr/local/bin/run-logs-send-email"       
+      user: root                   
+      name: "Run load tests, parse logs and send email"
+      hour: 3
+      minute: 0

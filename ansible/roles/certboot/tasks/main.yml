@@ -1,0 +1,12 @@
+---
+- include_role:
+    name: geerlingguy.certbot
+
+- name: Create cert dir
+  file: path=/etc/haproxy/certs state=directory
+
+- name: Combine certificate
+  shell: |
+    cat {{ certbot_certificates_path }}/{{ certbot_domains }}/fullchain.pem {{ certbot_certificates_path }}/{{ certbot_domains }}/privkey.pem > /etc/haproxy/certs/{{ hostname }}
+  args:
+    executable: /bin/bash  

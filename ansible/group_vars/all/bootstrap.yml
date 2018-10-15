@@ -1,5 +1,6 @@
 ---
 
+hostname: local.linx.com
 admin_user: ubuntu
 deploy_user: deploy
 deploy_user_group: "{{ deploy_user }}"

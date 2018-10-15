@@ -1,0 +1,3 @@
+#!/bin/bash
+
+awk '{print $19}' /var/log/haproxy.log | sort | uniq -c | sort -rn

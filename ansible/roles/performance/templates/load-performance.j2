@@ -1,0 +1,27 @@
+#!/bin/bash
+
+{# fetch the first lb #}
+LB_IP=''
+{% for lb in groups.lb %}
+    LB_IP={{ hostvars[lb]['ansible_host'] }}   
+{% endfor %}
+
+if [ $LB_IP = '' ]; then
+    printf "\u274c Not found the lb ip\n" >&2 \
+    exit 1
+fi
+
+INITIAL_N=100000
+INITIAL_C=1000
+FILE_LOG=/tmp/ab-tests.log
+
+
+`ab -k -t 60s -n $INITIAL_N -c $INITIAL_C -q http://$LB_IP/index.html > $FILE_LOG` 
+
+RPM=`cat $FILE_LOG | grep "Time per request:" | tail -1  | awk '{print $4}'`
+FAILURE=`cat $FILE_LOG | grep "Failed requests:" | awk '{print $3}'`
+
+echo "Throughput average: ${RPM}ms"
+echo "Failure requests: ${FAILURE}"
+echo "See all metrics: ${FILE_LOG}" 
+

@@ -5,11 +5,16 @@
 # (if persistance is required use, "source")
 balance: roundrobin 
 
-# Ethernet interface on which the load balancer should listen
-# Defaults to the first interface. Change this to:
-#
-#  iface: eth1
-#
-# ...to override.
-#
-iface: '{{ ansible_default_ipv4.interface }}'
+certbot_admin_email: "{{ email_logs }}"
+certbot_auto_renew_user: root
+certbot_create_if_missing: yes
+certbot_install_from_source: yes
+certbot_dir: "/opt/geerlingguy.certbot"
+certbot_certificates_path: "/etc/letsencrypt/live"
+certbot_auto_renew_options: "--pre-hook 'systemctl stop haproxy' --post-hook 'systemctl start haproxy' --quiet --no-self-upgrade"
+certbot_create_standalone_stop_services:
+  - haproxy
+  
+certbot_certs:
+  - domains:
+    - "{{ hostname }}"

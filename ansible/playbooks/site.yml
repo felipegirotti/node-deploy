@@ -18,6 +18,10 @@
   become: yes
   become_user: root
   roles: 
+    - role: certboot
+      tags:
+        - certboot
+      when: certboot is defined
     - role: hproxy     
     - role: sendmail
     - role: performance
